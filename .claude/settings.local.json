@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -rf /Users/svetakostinsky/vercelapp)",
+      "Bash(mkdir /Users/svetakostinsky/vercelapp)",
+      "Bash(vercel --version)",
+      "Bash(supabase --version)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(npm install *)",
+      "Bash(vercel whoami *)",
+      "Bash(vercel projects *)"
+    ]
+  }
+}
