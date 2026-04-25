@@ -38,6 +38,17 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
+  // PKCE auth confirmation lands at the Supabase Site URL root with `?code=…`.
+  // Forward to /auth/callback which exchanges the code for a session.
+  if (
+    request.nextUrl.searchParams.has("code") &&
+    request.nextUrl.pathname === "/"
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/callback";
+    return NextResponse.redirect(url);
+  }
+
   // Do not run code between createServerClient and
   // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
@@ -51,7 +62,8 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname !== "/" &&
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !request.nextUrl.pathname.startsWith("/auth") &&
+    !request.nextUrl.pathname.startsWith("/notes")
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
